@@ -1,6 +1,6 @@
 {
   "name": "mTLS Cert Manager",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "slug": "mtls_certmanager",
   "description": "Add-on zur Verwaltung von mTLS Client-Zertifikaten mit PKCS#12 Export",
   "arch": ["armv7", "armhf", "aarch64", "amd64", "i386"],
