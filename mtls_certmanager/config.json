@@ -1,6 +1,6 @@
 {
   "name": "mtls_certmanager",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "slug": "mtls_certmanager",
   "description": "MTLS Zertifikatmanager Add-on für Home Assistant",
   "arch": ["armv7", "armhf", "aarch64", "amd64", "i386"],
