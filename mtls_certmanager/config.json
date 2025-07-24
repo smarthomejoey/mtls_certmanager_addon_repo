@@ -1,30 +1,20 @@
 {
-  "name": "mTLS Cert Manager",
-  "version": "1.0.2",
+  "name": "mtls_certmanager",
+  "version": "1.0.0",
   "slug": "mtls_certmanager",
-  "description": "Add-on zur Verwaltung von mTLS Client-Zertifikaten mit PKCS#12 Export",
+  "description": "MTLS Zertifikatmanager Add-on für Home Assistant",
   "arch": ["armv7", "armhf", "aarch64", "amd64", "i386"],
   "startup": "application",
   "boot": "auto",
+  "options": {},
+  "schema": {},
   "ports": {
     "5000/tcp": 5000
   },
-  "options": {
-    "sync_enabled": true,
-    "ssh_host": "localhost",
-    "ssh_user": "user",
-    "ssh_pass": "password",
-    "ssh_port": 22,
-    "remote_ca_path": "/etc/nginx/certs/ca.crt",
-    "remote_crl_path": "/etc/nginx/certs/crl.pem"
-  },
-  "schema": {
-    "sync_enabled": "bool",
-    "ssh_host": "str",
-    "ssh_user": "str",
-    "ssh_pass": "str",
-    "ssh_port": "int",
-    "remote_ca_path": "str",
-    "remote_crl_path": "str"
-  }
+  "map": ["data:rw"],
+  "host_network": false,
+  "webui": "http://[HOST]:5000",
+  "ingress": false,
+  "panel_icon": "mdi:certificate",
+  "panel_title": "MTLS Cert Manager"
 }
