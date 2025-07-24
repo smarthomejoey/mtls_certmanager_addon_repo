@@ -12,6 +12,7 @@ app.secret_key = os.urandom(24)  # Für Flash messages
 CA_CERT_PATH = os.environ.get("CA_CERT_PATH", "/data/ca/ca.crt")
 CA_KEY_PATH = os.environ.get("CA_KEY_PATH", "/data/ca/ca.key")
 CRL_PATH = os.environ.get("CRL_PATH", "/data/ca/crl.pem")
+CA_DIR = os.environ.get("CA_DIR","/data/ca")
 
 SYNC_ENABLED = os.environ.get("SYNC_ENABLED", "false").lower() == "true"
 SSH_HOST = os.environ.get("SSH_HOST", "")
@@ -106,6 +107,42 @@ def download(filename):
         return "Datei nicht gefunden", 404
     return send_file(file_path, as_attachment=True)
 
+def create_ca_if_not_exists():
+    if not os.path.exists(CA_CERT_PATH) or not os.path.exists(CA_KEY_PATH):
+        os.makedirs(CA_DIR, exist_ok=True)
+        print("CA-Zertifikat und Schlüssel werden erzeugt...")
+
+        subprocess.run([
+            "openssl", "genrsa", "-out", CA_KEY_PATH, "4096"
+        ], check=True)
+
+        subprocess.run([
+            "openssl", "req", "-x509", "-new", "-nodes",
+            "-key", CA_KEY_PATH,
+            "-sha256",
+            "-days", "3650",
+            "-out", CA_CERT_PATH,
+            "-subj", "/CN=HomeAssistant-Local-CA"
+        ], check=True)
+
+        # Optional: CRL erstellen
+        crl_path = os.path.join(CA_DIR, "crl.pem")
+        subprocess.run([
+            "openssl", "ca", "-gencrl",
+            "-keyfile", CA_KEY_PATH,
+            "-cert", CA_CERT_PATH,
+            "-out", crl_path
+        ], check=False)  # Wenn kein Index.txt, ignorieren
+
+        print("CA wurde erstellt.")
+    else:
+        print("CA ist bereits vorhanden.")
 
 if __name__ == "__main__":
+    try:
+        create_ca_if_not_exists()
+    except subprocess.CalledProcessError as e:
+        print(f"Fehler bei der CA-Erstellung: {e}")
+        exit(1)
+
     app.run(host="0.0.0.0", port=5000)
