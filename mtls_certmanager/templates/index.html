@@ -1,27 +1,25 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<title>mTLS Cert Manager</title>
-<style>
-body { font-family: sans-serif; margin: 2em; }
-input, button { margin: 4px; padding: 6px; }
-</style>
+  <meta charset="utf-8">
+  <title>mTLS Cert Manager</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-<h1>mTLS Cert Manager</h1>
-<form action="/create_cert" method="post">
-  <input type="text" name="common_name" placeholder="Common Name" required>
-  <button type="submit">Client-Zertifikat erstellen</button>
-</form>
-
-<form action="/sync" method="post">
-  <input type="text" name="npm_host" placeholder="NPM Host" required>
-  <input type="text" name="npm_user" placeholder="NPM User" required>
-  <input type="password" name="npm_password" placeholder="NPM Passwort" required>
-  <input type="text" name="remote_path" placeholder="/data/ssl" required>
-  <button type="submit">CA & CRL zu NPM synchronisieren</button>
-</form>
-<p><a href="/download/ca.crt">CA herunterladen</a> | <a href="/download/crl.pem">CRL herunterladen</a></p>
+  <h1>mTLS Zertifikat erstellen</h1>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <ul class="flashes">
+      {% for category, message in messages %}
+        <li class="{{ category }}">{{ message }}</li>
+      {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+  <form method="POST">
+    <label for="common_name">Common Name (CN):</label><br>
+    <input type="text" id="common_name" name="common_name" required><br><br>
+    <button type="submit">Zertifikat erstellen</button>
+  </form>
 </body>
 </html>

@@ -1,2 +1,4 @@
-flask
-paramiko
+Flask>=2.3,<3.0
+paramiko>=3.4,<4.0
+cryptography>=42,<43
+pyopenssl>=24,<25
